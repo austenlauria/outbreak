@@ -1,21 +1,14 @@
+/**
+ * @file: main.js
+ */
+
+
 (function ($) {
 
-  var ManualRoutesView = Backbone.View.extend({
-    el: $('#manual_routes'),
-    initialize: function () {
-    },
-    render: function () {
-    }
-  });
+  var route = new Traceroute([], {id:'google.com'});
+  route.fetch();
 
-  var AppView = Backbone.View.extend({
-    el: $('body'),
-    initialize: function () {
-      this.manualRoutesView = new ManualRoutesView;
-      // TODO make these views
-      // this.googleMapView = new GoogleMapView;
-    }
-  });
-
+  var pcap = new Pcap("10", "tcp");
+  pcap.print();
   var app = new AppView;
 })(jQuery);
