@@ -70,18 +70,50 @@ var Traceroute = Backbone.Collection.extend({
       var a = obj.attributes;
       var c = new google.maps.LatLng(a.lat, a.lon);
 
-      self.markers.push(new google.maps.Marker({
+      if(a.city == "") var city_name = "unknown location";
+        else var city_name = a.city;
+
+      var marker = new google.maps.Marker({
         position: c,
         map: map,
-        title: obj.cid,
+        title: city_name,
         color: self.color
-      }));
+      });
+
+      // Format the latitude and longitude input to be more user firendly.
+      var formated_lat = (a.lat >= 0) ? a.lat + " N" : Math.abs(a.lat) + " S";
+      var formated_lon = (a.lon >= 0) ? a.lon + " E" : Math.abs(a.lon) + " W";
+
+      // Update the city information panel on marker click
+      google.maps.event.addListener(marker, 'click', function(){
+        if($("#cityinfo-empty").length > 0) {
+          $("#cityinfo-empty").remove();
+          $("#cityinfo-container").append($("#cityinfo-city"));
+          $("#cityinfo-container").append($("#cityinfo-coutry"));
+          $("#cityinfo-container").append($("#cityinfo-ip"));
+          $("#cityinfo-container").append($("#cityinfo-lat"));
+          $("#cityinfo-container").append($("#cityinfo-lon"));
+          $("#cityinfo-container").append($("#cityinfo-loss"));
+          $("#cityinfo-container").append($("#cityinfo-ping"));
+        }
+
+        $("#cityinfo-city").text("City Name: " + a.city);
+        $("#cityinfo-country").text("Country: " + a.country);
+        $("#cityinfo-ip").text("IP Address: " + a.ip);
+        $("#cityinfo-lat").text("Latitude: " + formated_lat);
+        $("#cityinfo-lon").text("Longitude: " + formated_lon);
+        $("#cityinfo-loss").text("Packet Loss: " + a.loss);
+        $("#cityinfo-ping").text("Average Ping: " + a.ping);
+      });
+
+      self.markers.push(marker);
 
       coords.push(c);
     });
 
     this.el.find(".spinner").remove();
     this.el.find(".badge").append(this.markers.length);
+    this.el.find(".badge").css("background-color", this.color);
     this.el.find(".badge").before(
         "<span class='icon remove-route glyphicon glyphicon-remove'></span>");
     this.el.find(".badge").before(
