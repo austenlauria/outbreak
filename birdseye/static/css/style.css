@@ -49,6 +49,14 @@ html, body, #map_canvas {
   border-radius: 4px;
 }
 
+#monitoring_button {
+  float: right;
+  position: relative;
+  left: 900px;
+  top: 10%;
+  height: 26px;
+  z-index: 1;
+}
 #city_overlay {
   background-color: #e5ddcb;
   position: absolute;
@@ -61,6 +69,17 @@ html, body, #map_canvas {
 #ip_container {
   max-height:130px;
   overflow-y: auto;
+}
+
+#packet_container {
+  max-height:130px;
+  overflow-y: auto;
+}
+
+#add-packet-container {
+  margin-top:10px;
+  padding-left:0;
+
 }
 
 #add-ip-container {

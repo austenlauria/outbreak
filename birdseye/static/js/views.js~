@@ -107,6 +107,7 @@ var PcapView = Backbone.View.extend({
    },
 
   initialize: function() {
+   this.sessionPackets = []
    this.render();
    _.bindAll(this, "renderPacketList");
   },
@@ -120,11 +121,13 @@ var PcapView = Backbone.View.extend({
    var filter  =  $("#filterBox").val();
    var packets =  $("#packetBox").val();
    var newObject = this;
-
+   console.log("here I am starting a capture..." + filter + " " + packets);
    $.ajax("pcap_test/" + filter + "/" + packets).
                          done(function (obj) {
                          var pkts = obj.capture_list[0].split(",");
+                         newObject.sessionPackets = pkts;
                          newObject.renderPacketList(pkts);
+                         
                          });
 
 
@@ -146,7 +149,7 @@ var PcapView = Backbone.View.extend({
    $("#packet_container").show();
     for(var i = 0; i < packets.length -1; i++) {
       var stuff = $(".ip-list-template").clone(true, true).attr("id",i)
-      .removeClass("ip-list-template").addClass("ipEl").appendTo("#packet_container");
+      .removeClass("ip-list-template").addClass("ipElement").appendTo("#packet_container");
       stuff.id = i;
       stuff.find(".par").append(packets[i]);
     
