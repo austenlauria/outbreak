@@ -107,12 +107,11 @@ var PcapView = Backbone.View.extend({
    },
 
   initialize: function() {
-   this.render();
+    this.render();
    _.bindAll(this, "renderPacketList");
   },
 
   render: function() {
-   console.log("sucks");
    this.$el.show();
   },
  
@@ -121,27 +120,50 @@ var PcapView = Backbone.View.extend({
    var packets =  $("#packetBox").val();
    var newObject = this;
 
-   $.ajax("pcap_test/" + filter + "/" + packets).
+   if(packets % 1 === 0 && packets != "" && filter != "") {
+    $.ajax("pcap_test/" + filter + "/" + packets).
                          done(function (obj) {
                          var pkts = obj.capture_list[0].split(",");
-                         newObject.renderPacketList(pkts);
+                         console.log("return " + pkts);
+                         if(pkts == "") {
+                          alert("Invalid Filter.");
+                         }
+                         else {
+                          newObject.renderPacketList(pkts);
+                         }
                          });
+   } else {
+    if(filter == "") {
+     alert("Please enter a filter.");
+    }
+    else {
+     alert("Invalid packet number.");
+     $("#packetBox").val("");
+    }
+   }
 
 
  },
 
-  removePackets: function() {
-   /* var elem = document.getElementById("add-packet-container");
-    var par = elem.find(".par");
-    par.remove();
-    for(var i = 0; i < listItem.length; i++) {
-    listItem[i].remove();
-    console.log("here");
-    }
-  */
+  removePackets: function(elements) {
+   if(!elements.size) {
+    elements  = $("#packet_container div");
+   }
+   if(elements.length > 0) {
+    elements.each(function() {
+    this.remove();
+   }); 
+   $("#packet_container").hide();
+  }  
+console.log("Here is length " + elements.length);
   }, 
 
   renderPacketList: function(packets) {
+
+   var elements = $("#packet_container div");
+   if(elements.length > 0) {
+     this.removePackets(elements);
+   }
 
    $("#packet_container").show();
     for(var i = 0; i < packets.length -1; i++) {
