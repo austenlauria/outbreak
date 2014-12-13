@@ -115,34 +115,53 @@ var PcapView = Backbone.View.extend({
    this.$el.show();
   },
  
-  startMonitoring: function() {     
-   var filter  =  $("#filterBox").val();
-   var packets =  $("#packetBox").val();
-   var newObject = this;
+  startMonitoring: function(filter, numPackets, test) {     
+ 
+   if(test === undefined) {
+    filter  =  $("#filterBox").val();
+    numPackets =  $("#packetBox").val();
+   }
+   if(filter == "" || numPackets == "") {
+    alert("Please enter a filter string and packet number as an integer.");
+    return 0;
+   }
+   if((filter % 1 === 0)){
+    alert("Invalid filter. Please enter a filter string.");
+    return 0;
+   }
+   if(numPackets % 1 !== 0){
+     alert("Invalid packet number. Please enter an integer <= 1000.");
+     return 0;
+   }
+   if(numPackets % 1 === 0 && (($.type(filter) !== "string"))) {
+    alert("Invalid filter and packet number.");
+    return 0;      
+   }
+   if(numPackets > 1000) {
+    alert("Please limit packet capture to 1000 packets or less.");
+    return 0;
+   }
+   if(test == 1) {
+    return 1;
+   }
 
-   if(packets % 1 === 0 && packets != "" && filter != "") {
-    $.ajax("pcap_test/" + filter + "/" + packets).
+    var  newObject = this;
+    
+   if(numPackets % 1 === 0 && numPackets != "" && filter != "") {
+    $.ajax("pcap_test/" + filter + "/" + numPackets).
                          done(function (obj) {
                          var pkts = obj.capture_list[0].split(",");
                          console.log("return " + pkts);
                          if(pkts == "") {
-                          alert("Invalid Filter.");
+                           alert("Invalid Filter. Please enter a filter string");
+                           return 0;
                          }
-                         else {
-                          newObject.renderPacketList(pkts);
+                         else { 
+                            newObject.renderPacketList(pkts);
+                            return 1;
                          }
                          });
-   } else {
-    if(filter == "") {
-     alert("Please enter a filter.");
-    }
-    else {
-     alert("Invalid packet number.");
-     $("#packetBox").val("");
-    }
    }
-
-
  },
 
   removePackets: function(elements) {
