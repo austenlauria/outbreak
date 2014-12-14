@@ -5,7 +5,7 @@ import sys
 
 # Wrapper used in front end Ajax call.
 # Takes in filter, packet number and whether it is being called
-# from a test or not. It then calls the pcap executable 
+# from a test or not. It then calls the pcap executable
 # with command line arguments.
 # Returns a string of comma delimited ips if from user
 # Else returns exit value for testing.
