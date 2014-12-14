@@ -1,7 +1,7 @@
-Outbreak
+![alt tag](https://lh5.googleusercontent.com/-nkc_JUpJGIA/VI0_WRTsNrI/AAAAAAAAAYQ/NmWs_Sz7Arw/w1597-h579-no/birdseye_logo.png)
 =====
 
-Outbreak is a tool to monitor and display traceroutes using geolocation on IP addresses.
+Birdseye is a tool to monitor and display traceroutes using geolocation on IP addresses.
 
 How It Works
 ----
