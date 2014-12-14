@@ -4,6 +4,7 @@
 #include<sys/types.h>
 #include <sys/socket.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Current usage: sudo ./pcap (MANDATORY) "FILTER_EXPRESSION" (OPTIONAL) PACKET_COUNT 
    For valid filter expressions, you can use any capture 
@@ -63,51 +64,46 @@ int main(int argc, char* argv[])
   pcap_t *handle;                    /* PCap session */
   char *device;			     /* Device to capture on */
   struct bpf_program filter_program; /* The compiled filter program */
-  char filter_expression[500];       /* Our filter expression */
-  bpf_u_int32 mask;  		     /* IPv4 netmask of the network */	     
-  char errbuf[500];  		     /* Error buffer */
+  char* filter_expression;       /* Our filter expression */
+  bpf_u_int32 mask;  		     /* IPv4 netmask of the network */	  char errbuf[500];  		     /* Error buffer */
   pcap_if_t *all_devices, *d;	     /* Network we're capturing on */
   int network;
   int PACKET_COUNT = 500; 
+  int TEST = 0;
 
-  /* 
-     Having a mandatory filter argument just makes life easier. Also,
-     an uninitialized filter_expression argument is bad, and causes
-     undefined bevior (for obvious reasons). It makes life easier because
-     if we are to make the filter_expression arg optional, then I need to
-     account for the cases of the PACKET_COUNT arg. And I have a headache,
-     so, this works just fine. 
-  */
-  if(argc < 2) {
-   fprintf(stderr, "Filter expression MUST be passed in as an argument.!\n");
-   fprintf(stderr, "If no filter is wanted simply pass in %c%c.\n", '"', '"');
+
+  if(argc != 4) {
+   fprintf(stderr, "Invalid of command line argumets.\n");
+   fprintf(stderr, "usage: sudo ./pcap _filter _numPackets _test\n");
+   fprintf(stderr, "_test is 1 or 0.\n");
+   exit(1);
+  }
+  else {
+   filter_expression = (char *)malloc(strlen(argv[1]) + 1);
+   strcpy(filter_expression, argv[1]);
+   PACKET_COUNT = atoi(argv[2]);
+   TEST = atoi(argv[3]);
+  }
+  
+  if(TEST != 1 && TEST != 0) {
+    fprintf(stderr, "Invalid argument for test. Must be 1 or 0 (true/false)\n");
+    free(filter_expression);
+    exit(1);
+  }
+
+  if(PACKET_COUNT <= 0) {
+   fprintf(stderr, "Invalid packet argument. Must be > 0.\n");
+   free(filter_expression);
+   exit(1);
+  }
+ 
+  if(PACKET_COUNT > 1000) {
+   fprintf(stderr, "Packets should be <= 1000.\n");
+   free(filter_expression);
    exit(1);
   }
 
-  /*
-     Pass in filter expression argument in quotes, it's much easier.
-     This is assuming that the second argument will ALWAYS be the filter
-     expression. I will just go ahead and make that the standard.
-  */
-  if(argc >= 2) {
-    strcpy(filter_expression, argv[1]);
-    fprintf(stderr, "Filter Expression: %s\n", filter_expression);  
-  }
- 
-  /*
-     Gives us the option to allow the user to specify the numbr of packets
-     they want to capture. By default it is 500, regardless of the number
-     of arguments passes in. This is assuming that the second arg will 
-     ALWAYS be the number of packets we want to capture.
-  */
-  if(argc >= 3) {
-    PACKET_COUNT = atoi(argv[2]); /* Convert to int */
-  }
-  
-  if(PACKET_COUNT <= 0) {
-   exit(0);
-  }
-  /* 
+ /* 
      Finding devices to sniff on. Populates that list on return. 
      
      Return: int. 0 on success -1 on failure.
@@ -123,6 +119,7 @@ int main(int argc, char* argv[])
  
   if((pcap_findalldevs(&all_devices, errbuf)) < 0) {
     fprintf(stderr, "Error in pcap_findalldevs().\n Error: %s\n", errbuf);
+    free(filter_expression);
     exit(1);
   }
 
@@ -179,6 +176,7 @@ int main(int argc, char* argv[])
   */
   if((handle = pcap_open_live(device, SNAP_LENGTH, PROMISC, TIMEOUT, errbuf)) == NULL) {
     fprintf(stderr, "Error in pcap_open_live().\n Error: %s\n", errbuf);
+    free(filter_expression);
     exit(1);
   }
    
@@ -210,6 +208,7 @@ int main(int argc, char* argv[])
    fprintf(stderr, "Error in pcap_compile().\n Error:\n");
    pcap_perror(handle, errbuf);			/* Get the error message. */
    pcap_close(handle);
+   free(filter_expression);
    exit(1);
    } 
 
@@ -228,6 +227,7 @@ int main(int argc, char* argv[])
      fprintf(stderr, "Error in pcap_setfilter(). Error:\n");
      pcap_perror(handle, errbuf);		/* Get the error message. */
      pcap_close(handle);
+     free(filter_expression);
      exit(1);
    }
  
@@ -247,9 +247,12 @@ int main(int argc, char* argv[])
                     stops.
       
       0:            u_char*. Unused.
-  */ 
-  pcap_loop(handle, PACKET_COUNT, packet_handler, 0);
-      
+  */
+
+  //If test, ignore. 
+  if(TEST == 0) {
+   pcap_loop(handle, PACKET_COUNT, packet_handler, 0);
+  }    
   /* 
      Frees a list of devices used by findalldevs.
     
@@ -272,6 +275,7 @@ int main(int argc, char* argv[])
       handle: pcap_t*. Our pcap session.
   */
   pcap_close(handle);
+  free(filter_expression);
   return 0;
 
 }

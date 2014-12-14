@@ -56,10 +56,10 @@ api.add_resource(Traceroute, '/traceroute/<string:dest>')
 
 
 class Pcap(restful.Resource):
-    def get(self, pack, pFilter):
-        capture_list = core.pcap_test.pcap_funct(pack, pFilter)
+    def get(self, pack, pFilter, test):
+        capture_list = core.pcap_script.pcap_funct(pack, pFilter, test)
         print "Pcap funct called"
         return { 'capture_list': capture_list }
 
 
-api.add_resource(Pcap, '/pcap_test/<string:pack>/<string:pFilter>')
+api.add_resource(Pcap, '/pcap_script/<string:pack>/<string:pFilter>/<string:test>')

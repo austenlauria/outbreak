@@ -100,12 +100,13 @@ var AppView = Backbone.View.extend({
 var PcapView = Backbone.View.extend({
  el: $('#monitorWindow'),
  
-
+  //Events associated with monitoring
   events: {
    "click #startCapture" : "startMonitoring",
    "click #removePackets": "removePackets"
    },
 
+  //Render monitorWindow
   initialize: function() {
     this.render();
    _.bindAll(this, "renderPacketList");
@@ -115,45 +116,58 @@ var PcapView = Backbone.View.extend({
    this.$el.show();
   },
  
+  /* On start capturing click, validate user input from filter
+     and packet input boxes, and make ajax request to capture
+     and return a list of outgoing IP addresses to render in
+     a list.
+  */
   startMonitoring: function(filter, numPackets, test) {     
  
+   //Error cases, for testing and user validation.
    if(test === undefined) {
     filter  =  $("#filterBox").val();
     numPackets =  $("#packetBox").val();
    }
-   if(filter == "" || numPackets == "") {
-    alert("Please enter a filter string and packet number as an integer.");
-    return 0;
-   }
-   if((filter % 1 === 0)){
-    alert("Invalid filter. Please enter a filter string.");
-    return 0;
+   if(numPackets == "") {
+    alert("Please enter a packet number as an integer.");
+    return 1;
    }
    if(numPackets % 1 !== 0){
      alert("Invalid packet number. Please enter an integer <= 1000.");
-     return 0;
+     return 1;
    }
    if(numPackets % 1 === 0 && (($.type(filter) !== "string"))) {
     alert("Invalid filter and packet number.");
-    return 0;      
+    return 1;      
    }
-   if(numPackets > 1000) {
-    alert("Please limit packet capture to 1000 packets or less.");
-    return 0;
-   }
-   if(test == 1) {
+   if(numPackets > 1000 || numPackets <= 0) {
+    alert("Packet range must be in-between 0 and 1000.");
     return 1;
    }
+   //If test, don't do ajax call. User input is validated.
+   if(test == 1) {
+    return 0;
+   }
 
-    var  newObject = this;
-    
-   if(numPackets % 1 === 0 && numPackets != "" && filter != "") {
-    $.ajax("pcap_test/" + filter + "/" + numPackets).
+   var newObject = this;
+   
+   //Empty filters are allowed. "null" is an easy check on backend.
+   if(filter == "") {
+    filter = "null";
+   }
+ 
+   console.log("Filter: " + filter);
+
+   //Hide so user knows it is capturing again (if doing 2nd capture).
+   $("#pcap_ip_container").hide();
+   
+   //Make ajax request to get string of outgoing ips.
+   $.ajax("pcap_script/" + filter + "/" + numPackets + "/" + "0").
                          done(function (obj) {
                          var pkts = obj.capture_list[0].split(",");
-                         console.log("return " + pkts);
+                         //If no packets back, most likely a filtering syntax issue (or sudo).
                          if(pkts == "") {
-                           alert("Invalid Filter. Please enter a filter string");
+                           alert("Error in paket capture. Check filter syntax and/or restart application with sudo permissions"); 
                            return 0;
                          }
                          else { 
@@ -161,41 +175,43 @@ var PcapView = Backbone.View.extend({
                             return 1;
                          }
                          });
-   }
  },
 
+  //Removes packets from list on "clear" click.
+  //First element of ip list is passed in.
   removePackets: function(elements) {
    if(!elements.size) {
-    elements  = $("#packet_container div");
+    elements  = $("#pcap_ip_container div");
    }
+   //remove all ips from div.
    if(elements.length > 0) {
     elements.each(function() {
     this.remove();
    }); 
-   $("#packet_container").hide();
+   $("#pcap_ip_container").hide();
   }  
-console.log("Here is length " + elements.length);
-  }, 
+ }, 
 
-  renderPacketList: function(packets) {
+  //Takes in the parsed list of ips.
+  renderPacketList: function(ips) {
 
-   var elements = $("#packet_container div");
+   var elements = $("#pcap_ip_container div");
    if(elements.length > 0) {
      this.removePackets(elements);
    }
 
-   $("#packet_container").show();
-    for(var i = 0; i < packets.length -1; i++) {
+   //For each ip in the list, append to the ip container
+   $("#pcap_ip_container").show();
+    for(var i = 0; i < ips.length -1; i++) {
       var stuff = $(".ip-list-template").clone(true, true).attr("id",i)
-      .removeClass("ip-list-template").addClass("ipEl").appendTo("#packet_container");
+      .removeClass("ip-list-template").addClass("ipEl").appendTo("#pcap_ip_container");
       stuff.id = i;
-      stuff.find(".par").append(packets[i]);
-    
+      stuff.find(".par").append(ips[i]);
   }
    },
 
   handlePacketClick: function(id) {
-   var ip = $("#packet_container").find("#" + id).first().last().text()
+   var ip = $("#pcap_ip_container").find("#" + id).first().last().text()
    $("#search_field").val(ip.trim());
   }
 

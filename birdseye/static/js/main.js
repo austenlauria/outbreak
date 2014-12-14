@@ -11,7 +11,7 @@
 
 $(document).ready(function() {
 
- $("#packet_container").on('click', '.ipEl', function() {
+ $("#pcap_ip_container").on('click', '.ipEl', function() {
   var id = this.id;
   var pcap = new PcapView();
   pcap.handlePacketClick(id);
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
 var getitemList = function(){$(document).ready(function() {
 
- $("#packet_container").on('click', '.ipEl', function() {
+ $("#pcap_ip_container").on('click', '.ipEl', function() {
   var id = this.id;
   var pcap = new PcapView();
   pcap.handlePacketClick(id);
