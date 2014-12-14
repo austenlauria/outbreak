@@ -109,7 +109,7 @@ var PcapView = Backbone.View.extend({
   //Render monitorWindow
   initialize: function() {
     this.render();
-   _.bindAll(this, "renderPacketList");
+    _.bindAll(this, "renderPacketList");
   },
 
   render: function() {
@@ -156,8 +156,6 @@ var PcapView = Backbone.View.extend({
     filter = "null";
    }
  
-   console.log("Filter: " + filter);
-
    //Hide so user knows it is capturing again (if doing 2nd capture).
    $("#pcap_ip_container").hide();
    
@@ -180,35 +178,69 @@ var PcapView = Backbone.View.extend({
   //Removes packets from list on "clear" click.
   //First element of ip list is passed in.
   removePackets: function(elements) {
-   if(!elements.size) {
+  
+  /* If the user is clicking the clear button grab the ips.
+     Else, the user clicked the start capture button, and
+     A new render will clear current list
+     before generating a new list.
+  */
+
+  if(!elements.size) {
     elements  = $("#pcap_ip_container div");
    }
+  
+   var totalRemoved = 0;
+ 
    //remove all ips from div.
    if(elements.length > 0) {
     elements.each(function() {
     this.remove();
-   }); 
-   $("#pcap_ip_container").hide();
-  }  
+    totalRemoved++;
+   });
+
+   $("#pcap_ip_container").hide(); 
+   return totalRemoved;
+  }
+  return 0;
  }, 
 
   //Takes in the parsed list of ips.
   renderPacketList: function(ips) {
-
    var elements = $("#pcap_ip_container div");
+   var numIpsRendered = 0;  
+ 
+   //If there is already a list, clear it.
    if(elements.length > 0) {
      this.removePackets(elements);
    }
 
-   //For each ip in the list, append to the ip container
+   if(ips.length > 1000) {
+     alert("Error. To many ips.");
+     return numIpsRendered;
+   }
+
    $("#pcap_ip_container").show();
-    for(var i = 0; i < ips.length -1; i++) {
+
+  //For each ip in the list, append to the ip container
+  try {
+    for(var i = 0; i < ips.length; i++) {
+      if(ips[i] % 1 === 0) {
+        return numIpsRendered;
+      }
       var stuff = $(".ip-list-template").clone(true, true).attr("id",i)
       .removeClass("ip-list-template").addClass("ipEl").appendTo("#pcap_ip_container");
       stuff.id = i;
       stuff.find(".par").append(ips[i]);
+      numIpsRendered++;      
   }
-   },
+ }
+  catch(err) {
+   console.log("error!");
+   alert("Error!");
+   return -1;
+ }
+ return numIpsRendered;
+},
 
   handlePacketClick: function(id) {
    var ip = $("#pcap_ip_container").find("#" + id).first().last().text()

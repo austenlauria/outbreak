@@ -1,4 +1,55 @@
-QUnit.asyncTest('pcap Test', function() {
+QUnit.test('PCap Render List Tests', function() {
+    expect(6); //Tests expected.
+
+ var view = new PcapView();
+ var ips = [];
+ var result;
+ var ip = "42.42.42.42"
+ 
+ //1. List size 10
+ ips = renderListHelper(ip, 10);
+ result = view.renderPacketList(ips);
+ equal(10, result);
+
+ //2. 0 sized list
+ ips = renderListHelper(ip, 0);
+ result = view.renderPacketList(ips);
+ equal(0, result);
+
+ //3. 1000 sized list
+ ips = renderListHelper(ip, 1000);
+ result = view.renderPacketList(ips);
+ equal(1000, result);
+
+ //4. 1001 sized list
+ ips = renderListHelper(ip, 1001);
+ result = view.renderPacketList(ips);
+ equal(0, result);
+
+ //5. Single element list
+ ips = renderListHelper(ip, 1);
+ result = view.renderPacketList(ips);
+ equal(1, result);
+
+ //6. Non-string test
+ ips = renderListHelper(1, 3);
+ result = view.renderPacketList(ips);
+ equal(0, result);
+
+});
+
+
+function renderListHelper(ip,times) {
+ 
+ var ips = []; 
+
+ for(var i = 0; i < times; i++) {
+  ips[i] = ip;
+ }
+ return ips;
+}
+
+QUnit.test('PCap Monitoring Test', function() {
       expect(15); //Num tests expected
  
  var view = new PcapView();
@@ -64,8 +115,4 @@ QUnit.asyncTest('pcap Test', function() {
  result = view.startMonitoring(236, -50, 1);
  equal(1, result);
 
-});
-
-QUnit.test('assert.async() test', function() {
- equal(1,1,'One is one');
 });

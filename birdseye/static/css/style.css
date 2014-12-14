@@ -71,7 +71,7 @@ html, body, #map_canvas {
   overflow-y: auto;
 }
 
-#packet_container {
+#pcap_ip_container {
   max-height:130px;
   overflow-y: auto;
 }
