@@ -6,8 +6,9 @@ import unittest
 
 from birdseye.src import core
 
-#Comprehensive backend pcap testing.
-#30 test cases, all passing.
+
+# Comprehensive backend pcap testing.
+# 30 test cases, all passing.
 class TestPCap(unittest.TestCase):
 
     def test_pcap_0_packets(self):
@@ -21,7 +22,7 @@ class TestPCap(unittest.TestCase):
     def test_pcap_no_filter(self):
         return_value = core.pcap_script.pcap_funct("", "10", "1")
         self.assertTrue((return_value == 0))
-    
+
     def test_pcap_no_filter_no_packets(self):
         return_value = core.pcap_script.pcap_funct("", "", "1");
         self.assertTrue((return_value == 1))
@@ -37,25 +38,25 @@ class TestPCap(unittest.TestCase):
     def test_pcap_too_many_packets(self):
         return_value = core.pcap_script.pcap_funct("", "1001", "1")
         self.assertTrue((return_value == 1))
- 
+
     def test_pcap_way_too_many_packets(self):
         return_value = core.pcap_script.pcap_funct("", "10000", "1")
         self.assertTrue((return_value == 1))
 
     def test_pcap_min_packets(self):
         return_value = core.pcap_script.pcap_funct("", "1", "1")
-        self.assertTrue((return_value == 0));
+        self.assertTrue((return_value == 0))
 
     def test_pcap_bad_filter_no_packets(self):
-        return_value = core.pcap_script.pcap_funct("%$", "", "1");
+        return_value = core.pcap_script.pcap_funct("%$", "", "1")
         self.assertTrue((return_value == 1))
 
     def test_pcap_bad_filter_0_packets(self):
-        return_value = core.pcap_script.pcap_funct("%$", "0", "1");
+        return_value = core.pcap_script.pcap_funct("%$", "0", "1")
         self.assertTrue((return_value == 1))
- 
+
     def test_pcap_bad_filter_negative_packets(self):
-        return_value = core.pcap_script.pcap_funct("%$", "-50", "1");
+        return_value = core.pcap_script.pcap_funct("%$", "-50", "1")
         self.assertTrue((return_value == 1))
 
     def test_pcap_negative_packets(self):
