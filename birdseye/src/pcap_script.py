@@ -13,16 +13,16 @@ def pcap_funct(pfilter, packets, test):
 
     if pfilter == "null":
         pfilter = ""
-    
+
     # Run the pcap executable with cmmd args, equivalent to typing:
     # sudo ./pcap "_Filter" _numPackets test
     # on command line from src directory.
     pcapProcess = subprocess.Popen(["sudo", "./birdseye/src/pcap", pfilter, packets, test],
                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
+
     listOfIps = []
     i = 0
-    
+
     # Grab the stdout of the pcap program and insert it into array.
     while True:
         nextLine = pcapProcess.stdout.readline()
@@ -32,7 +32,7 @@ def pcap_funct(pfilter, packets, test):
         sys.stdout.write(nextLine)
         sys.stdout.flush()
         i += 1
-   
+
     if test == "0":
         return listOfIps
     else:

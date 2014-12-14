@@ -24,7 +24,7 @@ class TestPCap(unittest.TestCase):
         self.assertTrue((return_value == 0))
 
     def test_pcap_no_filter_no_packets(self):
-        return_value = core.pcap_script.pcap_funct("", "", "1");
+        return_value = core.pcap_script.pcap_funct("", "", "1")
         self.assertTrue((return_value == 1))
 
     def test_pcap_filter_no_packets(self):
