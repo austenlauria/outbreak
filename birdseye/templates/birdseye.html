@@ -23,8 +23,9 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="#">Birdseye
           <img id="logo_image" alt="" src="../static/images/birdseye_logo_m_white.png">
-        </a>
-      </div>
+        </a> 
+    <input class="button" id="monitoring_button" type="button" value="start monitoring">  
+   </div>
     </nav>
 
     <div id="map_canvas"></div>
@@ -46,6 +47,16 @@
           </div>
         </li>
       </ul>
+    <div id="monitorWindow" >
+  Capture Filter:  <input type="text" name="Filter" id="filterBox" value="tcp or ip"/><br />
+  Packet Number:  <input type="text" name="Packet number" id="packetBox" value="10" /><br /> 
+   <input type="button" id="startCapture" value="Start Capturing"/>
+   <input type="button" id="removePackets" name="removePackets" value="Clear"/>
+  <div id="pcap_ip_container" class="list-group"> </div>
+   <ul id="add-packet-container">
+   </ul>
+  </div>
+
 
     </div>
 

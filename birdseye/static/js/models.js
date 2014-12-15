@@ -247,14 +247,3 @@ var Traceroute = Backbone.Collection.extend({
   }
 
 });
-
-
-/*
-var Pcap = Backbone.Model.extend({
-  defaults: {
-   packets: 0,
-   filter: ""
-  }
-});
-*/
-
