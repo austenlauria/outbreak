@@ -1,18 +1,20 @@
-Outbreak
+![alt tag](https://lh5.googleusercontent.com/-nkc_JUpJGIA/VI0_WRTsNrI/AAAAAAAAAYQ/NmWs_Sz7Arw/w1597-h579-no/birdseye_logo.png)
 =====
 
-Outbreak is a tool to monitor and display traceroutes using geolocation on IP addresses.
+Birdseye is a tool to monitor and display traceroutes using geolocation on IP addresses.
 
 How It Works
 ----
-Blah Blah Flaks, PCap blah blah, Jquery blah, Google Maps Blah
+Our Software is web based and uses the freegeoip.net api to get geolocation information. when an ip address or a domain is entered, our back-end server runs a traceroute, fetch that data for each ip and returns that information to the front-end in a JSON object. We are using JQuery, underscore and Backbone.js on the front end to structure our code following MVC design methods. We use the Google Maps API to display each location on a map and interact with the markers.
+
+Screenshots
+----
 
 Easy Setup With Docker
 -----
 
 Manual Setup for Development
 -----
-**This is just a test beep boop**
 
 We'll start by installing some programs for our dependency management
 ```
