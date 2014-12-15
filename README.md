@@ -67,6 +67,23 @@ Now run the webserver accordingly
 ```
 $ python ./manage.py runserver
 ```
+Repo Overview
+-----
+Backend Code, includeing traceroute, packet capture, and geoip lookup is located in:
+birdeye/src/
+
+Front end code, including backbone views and models are located in:
+birdseye/static/js
+
+HTML template is located in:
+birdseye/templates
+
+CSS file is located in:
+birdseye/static/css
+
+Unit tests are located in:
+birdseye/tests
+
 KNOWN ISSUES/Features to complete
 -----
 Features:
