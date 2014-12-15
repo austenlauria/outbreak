@@ -16,13 +16,17 @@ def geoip_lookup(ip_list):
         return geoip_list
 
     for ip in ip_list:
-        response = client.city(ip["ip"])
-        geoip = dict(ip)
-        geoip["lon"] = response.location.longitude
-        geoip["lat"] = response.location.latitude
-        geoip["country"] = response.country.name
-        geoip["city"] = response.city.name
-        geoip_list.append(geoip)
+        try:
+            response = client.city(ip["ip"])
+            geoip = dict(ip)
+            geoip["lon"] = response.location.longitude
+            geoip["lat"] = response.location.latitude
+            geoip["country"] = response.country.name
+            geoip["city"] = response.city.name
+            geoip_list.append(geoip)
+        except ValueError:
+            print "caught invalid"
+
         # r = requests.get("http://freegeoip.net/json/" + ip["ip"])
         # if r.status_code == 404:
         #     continue
