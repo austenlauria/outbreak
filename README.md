@@ -35,6 +35,15 @@ Now we can safely install our deps
 $ pip install -r test_requirements.txt
 $ bower install
 ```
+Installing MTR-Tiny
+```
+First remove MTR if you have it:
+$ sudo apt-get remove mtr
+
+Now add mtr-tiny
+$ sudo apt-get install mtr-tiny
+1..2..3..Done!
+```
 
 Installing PCap
 ```
