@@ -49,6 +49,19 @@ html, body, #map_canvas {
   border-radius: 4px;
 }
 
+#monitorWindow {
+  background-color: #e5ddcb;
+  position: absolute;
+  width:350px;
+  top:330px;
+  left:10px;
+  border-radius: 4px;
+}
+
+#monitorContainer {
+  padding: 5px 5px 5px 5px;
+}
+
 #monitoring_button {
   float: right;
   position: relative;
@@ -139,6 +152,11 @@ html, body, #map_canvas {
   letter-spacing: 4px;
   color: #e5ddcb;
   font-size: 30px;
+}
+
+.input-group {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .list-group-item {

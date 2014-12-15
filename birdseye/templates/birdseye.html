@@ -24,7 +24,7 @@
         <a class="navbar-brand" href="#">Birdseye
           <img id="logo_image" alt="" src="../static/images/birdseye_logo_m_white.png">
         </a> 
-    <input class="button" id="monitoring_button" type="button" value="start monitoring">  
+    <input type="button" class="btn btn-default" id="monitoring_button" value="Start Monitoring">  
    </div>
     </nav>
 
@@ -47,17 +47,29 @@
           </div>
         </li>
       </ul>
+    </div>
+
     <div id="monitorWindow" >
-  Capture Filter:  <input type="text" name="Filter" id="filterBox" value="tcp or ip"/><br />
-  Packet Number:  <input type="text" name="Packet number" id="packetBox" value="10" /><br /> 
-   <input type="button" id="startCapture" value="Start Capturing"/>
-   <input type="button" id="removePackets" name="removePackets" value="Clear"/>
-  <div id="pcap_ip_container" class="list-group"> </div>
-   <ul id="add-packet-container">
-   </ul>
-  </div>
-
-
+      <a href="#" id="manual_routes" class="list-group-item active">
+        Packet Capture
+      </a>
+      <div id="monitorContainer">
+        <div class="input-group">
+          <span class="input-group-addon">Capture Filter:</span>
+          <input type="text" class="form-control" id="filterBox" value="tcp or ip"></input>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Packet Number:</span>
+          <input type="text" class="form-control" id="packetBox" value="10"></input>
+        </div>
+        <div class="btn-group">
+          <input type="button" class="btn btn-default" id="startCapture" value="Start Capturing"/>
+          <input type="button" class="btn btn-default" id="removePackets" name="removePackets" value="Clear"/>
+        </div>
+        <div id="pcap_ip_container" class="list-group"> </div>
+        <ul id="add-packet-container">
+        </ul>
+      </div>
     </div>
 
     <div id="city_overlay">

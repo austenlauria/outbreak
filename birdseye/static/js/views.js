@@ -37,6 +37,10 @@ var AppView = Backbone.View.extend({
     var self = this;
 
     var id = $("#search_field").val();
+    if(id == ""){
+     alert("Please enter an IP or web address.");
+     return;
+    }
 
    // Need to add, if ID exists in this.tracerouts RETURN
 
