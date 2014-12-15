@@ -3,8 +3,6 @@ file: geoip_lookup.py
 desc: TODO
 """
 import geoip2.webservice
-import requests
-import json
 
 
 def geoip_lookup(ip_list):
