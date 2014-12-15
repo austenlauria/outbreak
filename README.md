@@ -50,6 +50,15 @@ Now add mtr-tiny
 $ sudo apt-get install mtr-tiny
 1..2..3..Done!
 ```
+Installing/running GeoIp server
+```
+Go here: https://github.com/fiorix/freegeoip/releases
+And download FreeFeoIP v. 3.02
+Extract files to any directry and run the server:
+
+$. cd directoryWithGeoIpFiles
+$. ./freegeoip
+```
 
 Installing PCap
 ```
@@ -88,8 +97,6 @@ KNOWN ISSUES/Features to complete
 -----
 Features:
 
-Need to create our own local database of GeoIps as to not rely on unstable website apis.
-Bootstrap packet capture.
 Add more statistics to capture data/MTR data if possible.
 
 BUG:
