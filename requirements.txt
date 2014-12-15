@@ -3,3 +3,4 @@ flask-restful
 flask-script
 requests
 netaddr
+geoip2
