@@ -70,8 +70,10 @@ var AppView = Backbone.View.extend({
       error: function () {
         r.drawFailedRoute();
       }
+      $("#search_field").val("");
     });
     this.traceroutes.push(r);
+
   },
 
   removeTraceroute: function (r) {
