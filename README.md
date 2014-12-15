@@ -52,6 +52,11 @@ Now run the webserver accordingly
 ```
 $ python ./manage.py runserver
 ```
+KNOWN ISSUES/Features to complete
+-----
+Need to create our own local database of GeoIps as to not rely on unstable website apis.
+Bootstrap packet capture.
+Add more statistics to capture data/MTR data if possible.
 
 Meet the Team
 -----
